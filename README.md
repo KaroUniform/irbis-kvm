@@ -72,6 +72,36 @@ notarization. IrbisKVM does not store or try to bypass macOS privacy decisions.
 The script builds without signing and runs a protocol self-test. To use the
 Camera permission reliably, run a signed build from Xcode as described above.
 
+## Create a notarized public release
+
+Do not publish a direct-download DMG until it passes Apple notarization and
+Gatekeeper validation. A Developer ID certificate signs the app, but it does
+not replace notarization.
+
+First, create a **local-only** notarytool profile in Keychain using an Apple ID
+with access to the Developer Program and an app-specific password. Never commit
+that password or an App Store Connect private key.
+
+```bash
+xcrun notarytool store-credentials "IrbisKVM-notary" \
+  --apple-id "your-apple-id@example.com" \
+  --team-id "YOUR_TEAM_ID" \
+  --password "your-app-specific-password"
+```
+
+Then run the release script with your Developer ID Application identity:
+
+```bash
+DEVELOPER_ID_APPLICATION="Developer ID Application: Your Name (YOUR_TEAM_ID)" \
+NOTARYTOOL_PROFILE="IrbisKVM-notary" \
+./scripts/release-notarized.sh
+```
+
+It builds a Release app, enables the hardened runtime, signs the app and DMG
+with a secure timestamp, submits the DMG to Apple, staples the ticket, and
+fails unless Gatekeeper accepts the final artifact. Only upload the resulting
+DMG after this command succeeds.
+
 ## Safe UART diagnostic
 
 `CH9329WireProbe` never chooses a port automatically. Its default request is
@@ -108,6 +138,8 @@ xcrun swiftc -parse-as-library \
 - `IrbisKVM/Services/` — UART, HDMI capture, and local pointer capture.
 - `tools/` — protocol self-test and explicit-port hardware diagnostic.
 - `scripts/verify.sh` — unsigned build plus protocol test used by CI.
+- `scripts/release-notarized.sh` — Developer ID signing, notarization, and
+  Gatekeeper validation for public DMGs.
 
 ## License
 
