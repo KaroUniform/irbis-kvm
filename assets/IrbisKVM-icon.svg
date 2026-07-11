@@ -1,19 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Abstract IrbisKVM icon">
-  <rect width="1024" height="1024" fill="#091529"/>
-  <path d="M512 156 868 512 512 868 156 512Z" fill="none" stroke="#102541" stroke-width="8"/>
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="76">
-    <path d="M512 238v184h184" stroke="#91DEFF"/>
-    <path d="M786 512H602v184" stroke="#20D6E8"/>
-    <path d="M512 786V602H328" stroke="#71BFFF"/>
-    <path d="M238 512h184V328" stroke="#49C8F1"/>
+  <!-- The 1024px canvas stays transparent. The 832px body follows the macOS 15 icon template scale. -->
+  <path
+    d="M300 96h424c124 0 204 80 204 204v424c0 124-80 204-204 204H300c-124 0-204-80-204-204V300c0-124 80-204 204-204Z"
+    fill="#091529"
+  />
+  <path d="M512 226 798 512 512 798 226 512Z" fill="none" stroke="#123055" stroke-width="8"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="64">
+    <path d="M512 278v158h158" stroke="#91DEFF"/>
+    <path d="M746 512H588v158" stroke="#20D6E8"/>
+    <path d="M512 746V588H354" stroke="#71BFFF"/>
+    <path d="M278 512h158V354" stroke="#49C8F1"/>
   </g>
-  <rect x="458" y="458" width="108" height="108" rx="28" fill="#091529" transform="rotate(45 512 512)"/>
+  <rect x="464" y="464" width="96" height="96" rx="24" fill="#091529" transform="rotate(45 512 512)"/>
   <g fill="#C6F3FF">
-    <rect x="492" y="166" width="40" height="40" rx="12"/>
-    <rect x="818" y="492" width="40" height="40" rx="12"/>
+    <rect x="494" y="236" width="36" height="36" rx="11"/>
+    <rect x="752" y="494" width="36" height="36" rx="11"/>
   </g>
   <g fill="#23D7E8">
-    <rect x="492" y="818" width="40" height="40" rx="12"/>
-    <rect x="166" y="492" width="40" height="40" rx="12"/>
+    <rect x="494" y="752" width="36" height="36" rx="11"/>
+    <rect x="236" y="494" width="36" height="36" rx="11"/>
   </g>
 </svg>
