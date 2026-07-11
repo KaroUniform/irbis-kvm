@@ -3,7 +3,7 @@ import Foundation
 
 @MainActor
 final class VideoCaptureController: NSObject, ObservableObject {
-    @Published private(set) var statusText = "Видео выключено"
+    @Published private(set) var statusText = "Video is off"
     @Published private(set) var activeFormatText = "—"
     @Published private(set) var isRunning = false
     @Published private(set) var permissionDenied = false
@@ -52,7 +52,7 @@ final class VideoCaptureController: NSObject, ObservableObject {
         case .authorized:
             configureAndStart()
         case .notDetermined:
-            statusText = "Ожидаю разрешение на HDMI-capture…"
+            statusText = "Waiting for HDMI capture permission…"
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
                 DispatchQueue.main.async {
                     guard let self else { return }
@@ -60,15 +60,15 @@ final class VideoCaptureController: NSObject, ObservableObject {
                         self.configureAndStart()
                     } else {
                         self.permissionDenied = true
-                        self.statusText = "Нет доступа к камере — включи IrbisKVM в Privacy & Security → Camera"
+                        self.statusText = "Camera access is unavailable — enable IrbisKVM in System Settings → Privacy & Security → Camera"
                     }
                 }
             }
         case .denied, .restricted:
             permissionDenied = true
-            statusText = "Нет доступа к камере — включи IrbisKVM в Privacy & Security → Camera"
+            statusText = "Camera access is unavailable — enable IrbisKVM in System Settings → Privacy & Security → Camera"
         @unknown default:
-            statusText = "Неизвестный статус доступа к камере"
+            statusText = "Unknown camera authorization status"
         }
     }
 
@@ -76,7 +76,7 @@ final class VideoCaptureController: NSObject, ObservableObject {
         guard session.isRunning else { return }
         session.stopRunning()
         isRunning = false
-        statusText = "Видео остановлено"
+        statusText = "Video stopped"
     }
 
     private func configureAndStart() {
@@ -86,7 +86,7 @@ final class VideoCaptureController: NSObject, ObservableObject {
         let devices = externalVideoDevices()
 
         guard let device = devices.first(where: { $0.uniqueID == selectedDeviceID }) else {
-            statusText = "UVC HDMI-capture не найден"
+            statusText = "No UVC HDMI capture device found"
             return
         }
 
@@ -97,7 +97,7 @@ final class VideoCaptureController: NSObject, ObservableObject {
                 session.inputs.forEach(session.removeInput)
                 guard session.canAddInput(input) else {
                     session.commitConfiguration()
-                    statusText = "Не удалось добавить HDMI-capture в сессию"
+                    statusText = "Could not add the HDMI capture device to the session"
                     return
                 }
                 session.addInput(input)
@@ -114,7 +114,7 @@ final class VideoCaptureController: NSObject, ObservableObject {
             activeFormatText = describeActiveFormat(for: device)
             statusText = "HDMI: \(device.localizedName) · \(activeFormatText)"
         } catch {
-            statusText = "Не удалось открыть HDMI-capture: \(error.localizedDescription)"
+            statusText = "Could not open HDMI capture device: \(error.localizedDescription)"
         }
     }
 

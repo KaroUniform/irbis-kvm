@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Abstract IrbisKVM icon">
+  <rect width="1024" height="1024" fill="#091529"/>
+  <path d="M512 156 868 512 512 868 156 512Z" fill="none" stroke="#102541" stroke-width="8"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="76">
+    <path d="M512 238v184h184" stroke="#91DEFF"/>
+    <path d="M786 512H602v184" stroke="#20D6E8"/>
+    <path d="M512 786V602H328" stroke="#71BFFF"/>
+    <path d="M238 512h184V328" stroke="#49C8F1"/>
+  </g>
+  <rect x="458" y="458" width="108" height="108" rx="28" fill="#091529" transform="rotate(45 512 512)"/>
+  <g fill="#C6F3FF">
+    <rect x="492" y="166" width="40" height="40" rx="12"/>
+    <rect x="818" y="492" width="40" height="40" rx="12"/>
+  </g>
+  <g fill="#23D7E8">
+    <rect x="492" y="818" width="40" height="40" rx="12"/>
+    <rect x="166" y="492" width="40" height="40" rx="12"/>
+  </g>
+</svg>

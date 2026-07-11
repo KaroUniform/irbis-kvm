@@ -6,6 +6,8 @@
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
     <string>IrbisKVM</string>
+    <key>CFBundleIconFile</key>
+    <string>$(ICON_FILE)</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -17,13 +19,13 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>0.1.0</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSMinimumSystemVersion</key>
 	<string>14.0</string>
     <key>NSCameraUsageDescription</key>
-    <string>Нужно для отображения HDMI-видеосигнала подключённого сервера.</string>
+    <string>Used to display the HDMI video signal from the connected server.</string>
     <key>NSHighResolutionCapable</key>
     <true/>
 </dict>

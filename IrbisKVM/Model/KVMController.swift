@@ -4,7 +4,7 @@ import Foundation
 
 @MainActor
 final class KVMController: ObservableObject {
-    @Published private(set) var serialMessage = "UART не подключён"
+    @Published private(set) var serialMessage = "UART disconnected"
     @Published private(set) var serialStatus: ConnectionStatus = .idle
     @Published private(set) var inputCaptured = false
     @Published private(set) var targetConnected = false
@@ -93,14 +93,14 @@ final class KVMController: ObservableObject {
         guard !selectedSerialPort.isEmpty, availableSerialPorts.contains(selectedSerialPort) else {
             targetConnected = false
             serialStatus = .idle
-            serialMessage = "Выбери UART-порт и подключи его к Mac"
+            serialMessage = "Select a UART port and connect the adapter to your Mac"
             return
         }
         let path = selectedSerialPort
         let baud = selectedSerialBaud
 
         serialStatus = .connecting
-        serialMessage = "Проверяю \(path) @ \(baud.rawValue) бод…"
+        serialMessage = "Checking \(path) at \(baud.rawValue) baud…"
 
         Task {
             do {
@@ -108,12 +108,12 @@ final class KVMController: ObservableObject {
                 targetConnected = info.usbConfigured
                 serialStatus = info.usbConfigured ? .ready : .warning
                 serialMessage = info.usbConfigured
-                    ? "CH9329 готов: HID виден серверу (\(path), \(baud.rawValue) бод)"
-                    : "CH9329 отвечает, но сервер пока не перечислил HID"
+                    ? "CH9329 ready: the server detects the HID device (\(path), \(baud.rawValue) baud)"
+                    : "CH9329 is responding, but the server has not enumerated its HID device yet"
             } catch {
                 targetConnected = false
                 serialStatus = .failed
-                serialMessage = "UART не отвечает: \(error.localizedDescription)"
+                serialMessage = "UART is not responding: \(error.localizedDescription)"
             }
         }
     }
@@ -123,12 +123,12 @@ final class KVMController: ObservableObject {
         Task { await serial.close() }
         targetConnected = false
         serialStatus = .idle
-        serialMessage = "UART отключён"
+        serialMessage = "UART disconnected"
     }
 
     func beginInputCapture() {
         guard serialStatus == .ready || serialStatus == .warning else {
-            serialMessage = "Сначала подключи UART"
+            serialMessage = "Connect UART first"
             return
         }
         guard !inputCaptured else { return }
@@ -309,7 +309,7 @@ final class KVMController: ObservableObject {
         mouseButtons = 0
         targetConnected = false
         serialStatus = .failed
-        serialMessage = "Потеряна связь с UART: \(error.localizedDescription)"
+        serialMessage = "UART connection lost: \(error.localizedDescription)"
     }
 }
 

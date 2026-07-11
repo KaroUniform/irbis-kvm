@@ -48,11 +48,11 @@ struct KVMContentView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text("IrbisKVM")
                     .font(.title2.weight(.semibold))
-                Text("Локальная консоль для физического сервера")
+                Text("Local console for physical servers")
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            Button(controller.video.isRunning ? "Остановить HDMI" : "Включить HDMI") {
+            Button(controller.video.isRunning ? "Stop HDMI Capture" : "Start HDMI Capture") {
                 if controller.video.isRunning {
                     controller.video.stop()
                 } else {
@@ -64,9 +64,9 @@ struct KVMContentView: View {
                 controller.releaseInput()
                 (NSApp.keyWindow ?? NSApp.mainWindow)?.toggleFullScreen(nil)
             } label: {
-                Label("На весь экран", systemImage: "arrow.up.left.and.arrow.down.right")
+                Label("Full Screen", systemImage: "arrow.up.left.and.arrow.down.right")
             }
-            .help("На весь экран (⌃⌘F)")
+            .help("Full Screen (⌃⌘F)")
         }
     }
 
@@ -86,7 +86,7 @@ struct KVMContentView: View {
     }
 
     private var captureHint: some View {
-        Text(controller.inputCaptured ? "Ввод захвачен · локальный курсор скрыт · ⌃⌥Esc отпускает" : "Щёлкни по видео, чтобы захватить ввод")
+        Text(controller.inputCaptured ? "Input captured · local pointer hidden · ⌃⌥Esc releases" : "Click the video to capture input")
             .font(.caption.weight(.medium))
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
@@ -95,63 +95,71 @@ struct KVMContentView: View {
     }
 
     private var controls: some View {
-        HStack(spacing: 8) {
-            if controller.inputCaptured {
-                Button("Отпустить ввод") { controller.releaseInput() }
-            } else {
-                Text("Щёлкни по видео для ввода")
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                if controller.inputCaptured {
+                    Button("Release Input") { controller.releaseInput() }
+                } else {
+                    Text("Click the video to send input")
+                        .foregroundStyle(.secondary)
+                }
+
+                Divider().frame(height: 22)
+                keyButton("Esc", usage: 0x29)
+                keyButton("Del", usage: 0x4C)
+                keyButton("F1", usage: 0x3A)
+                keyButton("F2", usage: 0x3B)
+                keyButton("F10", usage: 0x43)
+                keyButton("F11", usage: 0x44)
+                keyButton("F12", usage: 0x45)
+                Button("Ctrl Alt Del") { controller.sendControlAltDelete() }
+                Spacer(minLength: 0)
             }
 
-            Divider().frame(height: 22)
-            keyButton("Esc", usage: 0x29)
-            keyButton("Del", usage: 0x4C)
-            keyButton("F1", usage: 0x3A)
-            keyButton("F2", usage: 0x3B)
-            keyButton("F10", usage: 0x43)
-            keyButton("F11", usage: 0x44)
-            keyButton("F12", usage: 0x45)
-            Button("Ctrl Alt Del") { controller.sendControlAltDelete() }
+            HStack(spacing: 8) {
+                Picker("Video Capture", selection: Binding(
+                    get: { controller.video.selectedDeviceID },
+                    set: { controller.video.selectDevice($0) }
+                )) {
+                    Text("Select a video capture device").tag("")
+                    ForEach(controller.video.availableDevices) { device in
+                        Text(device.name).tag(device.id)
+                    }
+                }
+                .frame(width: 210)
+                Button("↻") { controller.video.refreshDevices() }
+                    .help("Refresh video devices")
 
-            Spacer()
-            Picker("Видео", selection: Binding(
-                get: { controller.video.selectedDeviceID },
-                set: { controller.video.selectDevice($0) }
-            )) {
-                Text("Выберите capture").tag("")
-                ForEach(controller.video.availableDevices) { device in
-                    Text(device.name).tag(device.id)
-                }
-            }
-            .frame(width: 180)
-            Button("↻") { controller.video.refreshDevices() }
-                .help("Обновить список видеоустройств")
+                Divider().frame(height: 22)
 
-            Picker("UART", selection: Binding(
-                get: { controller.selectedSerialPort },
-                set: { controller.selectSerialPort($0) }
-            )) {
-                Text("Выберите UART").tag("")
-                ForEach(controller.availableSerialPorts, id: \.self) { port in
-                    Text(port.replacingOccurrences(of: "/dev/", with: "")).tag(port)
+                Picker("UART", selection: Binding(
+                    get: { controller.selectedSerialPort },
+                    set: { controller.selectSerialPort($0) }
+                )) {
+                    Text("Select a UART port").tag("")
+                    ForEach(controller.availableSerialPorts, id: \.self) { port in
+                        Text(port.replacingOccurrences(of: "/dev/", with: "")).tag(port)
+                    }
                 }
-            }
-            .frame(width: 220)
-            Button("↻") { controller.refreshSerialPorts() }
-                .help("Обновить список UART-портов")
-            Picker("Скорость", selection: Binding(
-                get: { controller.selectedSerialBaud },
-                set: { controller.selectSerialBaud($0) }
-            )) {
-                ForEach(SerialBaud.allCases) { baud in
-                    Text("\(baud.rawValue) бод").tag(baud)
+                .frame(width: 240)
+                Button("↻") { controller.refreshSerialPorts() }
+                    .help("Refresh UART ports")
+                Picker("Baud Rate", selection: Binding(
+                    get: { controller.selectedSerialBaud },
+                    set: { controller.selectSerialBaud($0) }
+                )) {
+                    ForEach(SerialBaud.allCases) { baud in
+                        Text("\(baud.rawValue) baud").tag(baud)
+                    }
                 }
+                .frame(width: 115)
+                Button("Connect UART") { controller.connectSerial() }
+                Button("Disconnect") { controller.disconnectSerial() }
+                    .disabled(controller.serialStatus == .idle)
+                Spacer(minLength: 0)
             }
-            .frame(width: 110)
-            Button("Подключить UART") { controller.connectSerial() }
-            Button("Отключить") { controller.disconnectSerial() }
-                .disabled(controller.serialStatus == .idle)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .controlSize(.small)
     }
 
@@ -168,7 +176,7 @@ struct KVMContentView: View {
                 status: controller.serialStatus
             )
             Spacer()
-            Text("Ввод отправляется только когда это окно активно")
+            Text("Input is sent only while this window is active")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

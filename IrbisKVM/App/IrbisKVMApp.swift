@@ -16,7 +16,7 @@ struct IrbisKVMApp: App {
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(after: .windowArrangement) {
-                Button("На весь экран") {
+                Button("Full Screen") {
                     controller.releaseInput()
                     (NSApp.keyWindow ?? NSApp.mainWindow)?.toggleFullScreen(nil)
                 }

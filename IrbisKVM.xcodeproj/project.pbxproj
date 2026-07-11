@@ -20,6 +20,7 @@
 		A1000000000000000000000B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000022 /* AVFoundation.framework */; };
 		A1000000000000000000000C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000023 /* SwiftUI.framework */; };
 		A1000000000000000000000D /* LocalPointerCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001B /* LocalPointerCapture.swift */; };
+		A1000000000000000000000E /* IrbisKVM.icns in Resources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001C /* IrbisKVM.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		A10000000000000000000019 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A1000000000000000000001A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000000000000000000001B /* LocalPointerCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalPointerCapture.swift; sourceTree = "<group>"; };
+		A1000000000000000000001C /* IrbisKVM.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Resources/IrbisKVM.icns; sourceTree = "<group>"; };
 		A10000000000000000000021 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A10000000000000000000022 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A10000000000000000000023 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -72,6 +74,7 @@
 				A10000000000000000000047 /* Services */,
 				A10000000000000000000048 /* Views */,
 				A1000000000000000000001A /* Info.plist */,
+				A1000000000000000000001C /* IrbisKVM.icns */,
 			);
 			path = IrbisKVM;
 			sourceTree = "<group>";
@@ -183,7 +186,9 @@
 		A10000000000000000000032 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = ();
+			files = (
+				A1000000000000000000000E /* IrbisKVM.icns in Resources */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
@@ -236,6 +241,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
+				ICON_FILE = IrbisKVM.icns;
 				INFOPLIST_FILE = IrbisKVM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../Frameworks",);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -253,6 +259,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
+				ICON_FILE = IrbisKVM.icns;
 				INFOPLIST_FILE = IrbisKVM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../Frameworks",);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;

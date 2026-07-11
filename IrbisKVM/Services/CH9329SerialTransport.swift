@@ -14,24 +14,24 @@ enum SerialTransportError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .noPort: return "serial-порт не найден"
+        case .noPort: return "No serial port found"
         case .openFailed(let detail), .configureFailed(let detail), .writeFailed(let detail), .readFailed(let detail):
             return detail
-        case .timeout: return "CH9329 не ответил за 500 мс"
-        case .unexpectedResponse(let command): return String(format: "неожиданный ответ 0x%02X", command)
+        case .timeout: return "CH9329 did not respond within 500 ms"
+        case .unexpectedResponse(let command): return String(format: "Unexpected response: 0x%02X", command)
         case .commandFailed(let status):
             let detail: String
             switch status {
-            case 0xE1: detail = "таймаут приёма UART"
-            case 0xE2: detail = "неверный заголовок кадра"
-            case 0xE3: detail = "неподдерживаемая команда"
-            case 0xE4: detail = "ошибка контрольной суммы"
-            case 0xE5: detail = "некорректные параметры"
-            case 0xE6: detail = "операция не поддержана текущим режимом"
-            default: detail = String(format: "код 0x%02X", status)
+            case 0xE1: detail = "UART receive timeout"
+            case 0xE2: detail = "Invalid frame header"
+            case 0xE3: detail = "Unsupported command"
+            case 0xE4: detail = "Checksum error"
+            case 0xE5: detail = "Invalid parameters"
+            case 0xE6: detail = "Operation not supported in the current mode"
+            default: detail = String(format: "Status code 0x%02X", status)
             }
             return "CH9329: \(detail)"
-        case .malformedInfo: return "CH9329 вернул некорректный GET_INFO"
+        case .malformedInfo: return "CH9329 returned an invalid GET_INFO response"
         }
     }
 }
@@ -62,7 +62,7 @@ actor CH9329SerialTransport {
 
         let descriptor = Darwin.open(path, O_RDWR | O_NOCTTY | O_NONBLOCK)
         guard descriptor >= 0 else {
-            throw SerialTransportError.openFailed(Self.systemError("не удалось открыть \(path)"))
+            throw SerialTransportError.openFailed(Self.systemError("Could not open \(path)"))
         }
 
         do {
@@ -131,7 +131,7 @@ actor CH9329SerialTransport {
     private func configure(_ descriptor: Int32, baud: SerialBaud) throws {
         var settings = termios()
         guard Darwin.tcgetattr(descriptor, &settings) == 0 else {
-            throw SerialTransportError.configureFailed(Self.systemError("не удалось прочитать настройки UART"))
+            throw SerialTransportError.configureFailed(Self.systemError("Could not read UART settings"))
         }
 
         Darwin.cfmakeraw(&settings)
@@ -140,10 +140,10 @@ actor CH9329SerialTransport {
         settings.c_cflag |= tcflag_t(CS8 | CLOCAL | CREAD)
 
         guard Darwin.cfsetspeed(&settings, baud.speed) == 0 else {
-            throw SerialTransportError.configureFailed(Self.systemError("не удалось выставить \(baud.rawValue) бод"))
+            throw SerialTransportError.configureFailed(Self.systemError("Could not set \(baud.rawValue) baud"))
         }
         guard Darwin.tcsetattr(descriptor, TCSANOW, &settings) == 0 else {
-            throw SerialTransportError.configureFailed(Self.systemError("не удалось применить настройки UART"))
+            throw SerialTransportError.configureFailed(Self.systemError("Could not apply UART settings"))
         }
     }
 
@@ -183,7 +183,7 @@ actor CH9329SerialTransport {
                 _ = Darwin.poll(&descriptor, 1, 100)
                 continue
             }
-            throw SerialTransportError.writeFailed(Self.systemError("не удалось записать команду CH9329"))
+            throw SerialTransportError.writeFailed(Self.systemError("Could not write CH9329 command"))
         }
     }
 
@@ -212,7 +212,7 @@ actor CH9329SerialTransport {
             if pollResult == 0 { continue }
             if pollResult < 0 {
                 if errno == EINTR { continue }
-                throw SerialTransportError.readFailed(Self.systemError("ошибка чтения UART"))
+                throw SerialTransportError.readFailed(Self.systemError("UART read error"))
             }
 
             let capacity = 256
@@ -223,7 +223,7 @@ actor CH9329SerialTransport {
             if count > 0 {
                 receiveBuffer.append(contentsOf: bytes.prefix(count))
             } else if count < 0 && errno != EAGAIN && errno != EWOULDBLOCK {
-                throw SerialTransportError.readFailed(Self.systemError("ошибка чтения UART"))
+                throw SerialTransportError.readFailed(Self.systemError("UART read error"))
             }
         }
 

@@ -11,6 +11,7 @@ xcuserdata/
 *.xcuserstate
 *.xccheckout
 *.xcscmblueprint
+*.iconset/
 
 # Swift Package Manager and editors
 .build/
