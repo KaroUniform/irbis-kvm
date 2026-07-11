@@ -97,10 +97,11 @@ NOTARYTOOL_PROFILE="IrbisKVM-notary" \
 ./scripts/release-notarized.sh
 ```
 
-It builds a Release app, enables the hardened runtime, signs the app and DMG
-with a secure timestamp, submits the DMG to Apple, staples the ticket, and
-fails unless Gatekeeper accepts the final artifact. Only upload the resulting
-DMG after this command succeeds.
+It builds a Release app, enables the hardened runtime, and signs it with a
+secure timestamp. It then notarizes and staples the app before packaging it,
+signs the DMG, notarizes and staples the DMG, and fails unless Gatekeeper
+accepts both artifacts. Only upload the resulting DMG after this command
+succeeds.
 
 ## Safe UART diagnostic
 
