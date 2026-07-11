@@ -1,0 +1,284 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* IrbisKVMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000011 /* IrbisKVMApp.swift */; };
+		A10000000000000000000002 /* KVMController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000012 /* KVMController.swift */; };
+		A10000000000000000000003 /* CH9329Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000013 /* CH9329Protocol.swift */; };
+		A10000000000000000000004 /* CH9329SerialTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000014 /* CH9329SerialTransport.swift */; };
+		A10000000000000000000005 /* VideoCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000015 /* VideoCaptureController.swift */; };
+		A10000000000000000000006 /* HIDKeyMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000016 /* HIDKeyMap.swift */; };
+		A10000000000000000000007 /* InputCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000017 /* InputCaptureView.swift */; };
+		A10000000000000000000008 /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000018 /* VideoPreviewView.swift */; };
+		A10000000000000000000009 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000019 /* ContentView.swift */; };
+		A1000000000000000000000A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000021 /* AppKit.framework */; };
+		A1000000000000000000000B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000022 /* AVFoundation.framework */; };
+		A1000000000000000000000C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000023 /* SwiftUI.framework */; };
+		A1000000000000000000000D /* LocalPointerCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001B /* LocalPointerCapture.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000000000000000000010 /* IrbisKVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IrbisKVM.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000011 /* IrbisKVMApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrbisKVMApp.swift; sourceTree = "<group>"; };
+		A10000000000000000000012 /* KVMController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVMController.swift; sourceTree = "<group>"; };
+		A10000000000000000000013 /* CH9329Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CH9329Protocol.swift; sourceTree = "<group>"; };
+		A10000000000000000000014 /* CH9329SerialTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CH9329SerialTransport.swift; sourceTree = "<group>"; };
+		A10000000000000000000015 /* VideoCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureController.swift; sourceTree = "<group>"; };
+		A10000000000000000000016 /* HIDKeyMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDKeyMap.swift; sourceTree = "<group>"; };
+		A10000000000000000000017 /* InputCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCaptureView.swift; sourceTree = "<group>"; };
+		A10000000000000000000018 /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
+		A10000000000000000000019 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A1000000000000000000001A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1000000000000000000001B /* LocalPointerCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalPointerCapture.swift; sourceTree = "<group>"; };
+		A10000000000000000000021 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		A10000000000000000000022 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		A10000000000000000000023 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000000000000000000031 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000000A /* AppKit.framework in Frameworks */,
+				A1000000000000000000000B /* AVFoundation.framework in Frameworks */,
+				A1000000000000000000000C /* SwiftUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10000000000000000000040 = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000041 /* IrbisKVM */,
+				A10000000000000000000042 /* Frameworks */,
+				A10000000000000000000043 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10000000000000000000041 /* IrbisKVM */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000044 /* App */,
+				A10000000000000000000045 /* Model */,
+				A10000000000000000000046 /* Protocol */,
+				A10000000000000000000047 /* Services */,
+				A10000000000000000000048 /* Views */,
+				A1000000000000000000001A /* Info.plist */,
+			);
+			path = IrbisKVM;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000042 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000021 /* AppKit.framework */,
+				A10000000000000000000022 /* AVFoundation.framework */,
+				A10000000000000000000023 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000043 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000010 /* IrbisKVM.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000044 /* App */ = {
+			isa = PBXGroup;
+			children = (A10000000000000000000011 /* IrbisKVMApp.swift */,);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000045 /* Model */ = {
+			isa = PBXGroup;
+			children = (A10000000000000000000012 /* KVMController.swift */,);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000046 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (A10000000000000000000013 /* CH9329Protocol.swift */,);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000047 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000014 /* CH9329SerialTransport.swift */,
+				A10000000000000000000015 /* VideoCaptureController.swift */,
+				A1000000000000000000001B /* LocalPointerCapture.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000048 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000016 /* HIDKeyMap.swift */,
+				A10000000000000000000017 /* InputCaptureView.swift */,
+				A10000000000000000000018 /* VideoPreviewView.swift */,
+				A10000000000000000000019 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000000000050 /* IrbisKVM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000061 /* Build configuration list for PBXNativeTarget "IrbisKVM" */;
+			buildPhases = (
+				A10000000000000000000030 /* Sources */,
+				A10000000000000000000031 /* Frameworks */,
+				A10000000000000000000032 /* Resources */,
+			);
+			buildRules = ();
+			dependencies = ();
+			name = IrbisKVM;
+			productName = IrbisKVM;
+			productReference = A10000000000000000000010 /* IrbisKVM.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000000000000000000060 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					A10000000000000000000050 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+				};
+			};
+			buildConfigurationList = A10000000000000000000062 /* Build configuration list for PBXProject "IrbisKVM" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base,);
+			mainGroup = A10000000000000000000040;
+			productRefGroup = A10000000000000000000043 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (A10000000000000000000050 /* IrbisKVM */,);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000000000000000000032 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000000000000000000030 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* IrbisKVMApp.swift in Sources */,
+				A10000000000000000000002 /* KVMController.swift in Sources */,
+				A10000000000000000000003 /* CH9329Protocol.swift in Sources */,
+				A10000000000000000000004 /* CH9329SerialTransport.swift in Sources */,
+				A10000000000000000000005 /* VideoCaptureController.swift in Sources */,
+				A1000000000000000000000D /* LocalPointerCapture.swift in Sources */,
+				A10000000000000000000006 /* HIDKeyMap.swift in Sources */,
+				A10000000000000000000007 /* InputCaptureView.swift in Sources */,
+				A10000000000000000000008 /* VideoPreviewView.swift in Sources */,
+				A10000000000000000000009 /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10000000000000000000070 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A10000000000000000000071 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A10000000000000000000072 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = IrbisKVM/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../Frameworks",);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.irbiscloud.IrbisKVM;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A10000000000000000000073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = IrbisKVM/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../Frameworks",);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.irbiscloud.IrbisKVM;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000000000000000000061 /* Build configuration list for PBXNativeTarget "IrbisKVM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (A10000000000000000000072 /* Debug */, A10000000000000000000073 /* Release */,);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000062 /* Build configuration list for PBXProject "IrbisKVM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (A10000000000000000000070 /* Debug */, A10000000000000000000071 /* Release */,);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000000000000000000060 /* Project object */;
+}
