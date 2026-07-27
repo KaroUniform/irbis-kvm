@@ -44,10 +44,27 @@ xcodebuild -quiet \
   build
 
 app="$derived_data/Build/Products/Release/IrbisKVM.app"
-codesign --force --options runtime --timestamp --sign "$identity" "$app"
+codesign --force \
+  --options runtime \
+  --timestamp \
+  --entitlements "$project_root/IrbisKVM/IrbisKVM.entitlements" \
+  --sign "$identity" \
+  "$app"
 codesign --verify --deep --strict --verbose=2 "$app"
+signed_entitlements="$(codesign -d --entitlements :- "$app" 2>/dev/null)"
+[[ "$signed_entitlements" == *"com.apple.security.device.camera"* ]] || {
+  echo "Signed app is missing the camera entitlement" >&2
+  exit 1
+}
 signature_details="$(codesign -dvv "$app" 2>&1)"
-[[ "$signature_details" == *"runtime"* && "$signature_details" == *"Timestamp="* ]] || {
+bundle_identifier="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Contents/Info.plist")"
+[[ "$bundle_identifier" == "com.irbiscloud.IrbisKVM" ]] || {
+  echo "Refusing to release unexpected bundle identifier: $bundle_identifier" >&2
+  exit 1
+}
+[[ "$signature_details" == *"Identifier=com.irbiscloud.IrbisKVM"* &&
+   "$signature_details" == *"runtime"* &&
+   "$signature_details" == *"Timestamp="* ]] || {
   echo "Signed app is missing hardened runtime or secure timestamp" >&2
   exit 1
 }
@@ -65,6 +82,7 @@ spctl --assess --type execute --verbose=4 "$app"
 dmg_stage="$workspace/dmg"
 mkdir "$dmg_stage"
 ditto "$app" "$dmg_stage/IrbisKVM.app"
+codesign --verify --deep --strict --verbose=2 "$dmg_stage/IrbisKVM.app"
 ln -s /Applications "$dmg_stage/Applications"
 
 mkdir -p "$artifact_directory"

@@ -48,6 +48,7 @@ final class VideoCaptureController: NSObject, ObservableObject {
     }
 
     func start() {
+        permissionDenied = false
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
             configureAndStart()
@@ -60,13 +61,16 @@ final class VideoCaptureController: NSObject, ObservableObject {
                         self.configureAndStart()
                     } else {
                         self.permissionDenied = true
-                        self.statusText = "Camera access is unavailable — enable IrbisKVM in System Settings → Privacy & Security → Camera"
+                        self.statusText = "macOS denied camera access for this signed app"
                     }
                 }
             }
-        case .denied, .restricted:
+        case .denied:
             permissionDenied = true
-            statusText = "Camera access is unavailable — enable IrbisKVM in System Settings → Privacy & Security → Camera"
+            statusText = "macOS denied camera access for this signed app"
+        case .restricted:
+            permissionDenied = true
+            statusText = "Camera access is restricted by macOS policy"
         @unknown default:
             statusText = "Unknown camera authorization status"
         }
