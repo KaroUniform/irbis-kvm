@@ -22,6 +22,10 @@ struct CH9329Info: Equatable {
 enum CH9329Protocol {
     static let header: [UInt8] = [0x57, 0xAB]
 
+    // Header, address, command, length, the 8-byte keyboard report, and the checksum. Pacing code
+    // needs the size to know how long a single keystroke frame occupies the UART.
+    static let keyboardFrameByteCount = 14
+
     static func frame(command: UInt8, data: [UInt8], address: UInt8 = 0) -> [UInt8] {
         precondition(data.count <= 64, "CH9329 accepts at most 64 payload bytes")
         var bytes = header + [address, command, UInt8(data.count)] + data

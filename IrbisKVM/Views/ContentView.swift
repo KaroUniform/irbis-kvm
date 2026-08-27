@@ -113,6 +113,17 @@ struct KVMContentView: View {
                 keyButton("F11", usage: 0x44)
                 keyButton("F12", usage: 0x45)
                 Button("Ctrl Alt Del") { controller.sendControlAltDelete() }
+
+                Divider().frame(height: 22)
+                if controller.isPasting {
+                    ProgressView(value: controller.pasteProgress)
+                        .frame(width: 90)
+                    Button("Cancel Paste") { controller.cancelPaste() }
+                } else {
+                    Button("Paste Clipboard") { controller.pasteClipboard() }
+                        .disabled(!controller.canPasteClipboard)
+                        .help("Types the clipboard on the server as US-layout keystrokes (⇧⌘V)")
+                }
                 Spacer(minLength: 0)
             }
 
@@ -175,6 +186,13 @@ struct KVMContentView: View {
                 detail: controller.serialMessage,
                 status: controller.serialStatus
             )
+            if !controller.pasteMessage.isEmpty {
+                // Skipped characters are the one thing here that must never be truncated away.
+                Text(controller.pasteMessage)
+                    .font(.caption)
+                    .foregroundStyle(controller.pasteSkippedCharacters > 0 ? Color.orange : Color.secondary)
+                    .layoutPriority(1)
+            }
             Spacer()
             Text("Input is sent only while this window is active")
                 .font(.caption)

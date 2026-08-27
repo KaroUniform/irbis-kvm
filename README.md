@@ -53,6 +53,21 @@ server. The mouse is relative, which is the most reliable mode in BIOS/UEFI.
 Use the **«На весь экран»** button or `Ctrl`+`Command`+`F` for fullscreen. Entering
 fullscreen releases captured input first, preventing a stuck local cursor.
 
+## Clipboard paste
+
+**«Paste Clipboard»** or `Shift`+`Command`+`V` types the Mac clipboard on the
+server key by key. It does not need captured input, it shows progress, and
+**«Cancel Paste»** stops it in the middle. `Shift`+`Command`+`V` is used instead
+of `Command`+`V` on purpose: while input is captured, `Command`+`V` has to stay a
+keystroke for the server.
+
+CH9329 sends US scancodes, so only what a US keyboard can produce is typed, and
+what appears on screen still depends on the layout the server itself is using.
+Cyrillic, accented letters, and emoji cannot be typed at all: they are skipped,
+counted, and reported in the status line rather than dropped quietly. Typing is
+paced to the selected baud rate, so a long command takes a few seconds at
+9,600 baud.
+
 ## Camera permission
 
 The app requests Camera access only while macOS reports that the permission is

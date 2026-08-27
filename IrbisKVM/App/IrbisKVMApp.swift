@@ -15,6 +15,14 @@ struct IrbisKVMApp: App {
         }
         .windowResizability(.contentSize)
         .commands {
+            CommandGroup(after: .pasteboard) {
+                // ⇧⌘V, not ⌘V: while input is captured, ⌘V has to stay a keystroke for the server.
+                Button("Paste Clipboard to Server") {
+                    controller.pasteClipboard()
+                }
+                .keyboardShortcut("v", modifiers: [.command, .shift])
+                .disabled(!controller.canPasteClipboard || controller.isPasting)
+            }
             CommandGroup(after: .windowArrangement) {
                 Button("Full Screen") {
                     controller.releaseInput()

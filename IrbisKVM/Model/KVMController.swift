@@ -8,6 +8,10 @@ final class KVMController: ObservableObject {
     @Published private(set) var serialStatus: ConnectionStatus = .idle
     @Published private(set) var inputCaptured = false
     @Published private(set) var targetConnected = false
+    @Published private(set) var isPasting = false
+    @Published private(set) var pasteProgress = 0.0
+    @Published private(set) var pasteMessage = ""
+    @Published private(set) var pasteSkippedCharacters = 0
     @Published private(set) var availableSerialPorts: [String] = []
     @Published var selectedSerialPort = ""
     @Published var selectedSerialBaud: SerialBaud = .baud9600
@@ -24,6 +28,7 @@ final class KVMController: ObservableObject {
     private var pendingMouseWheel: CGFloat = 0
     private var mouseWriteInFlight = false
     private var mousePump: Task<Void, Never>?
+    private var pasteTask: Task<Void, Never>?
     private var inputGeneration = 0
     private let pointerCapture = LocalPointerCapture()
     private var observers: [NSObjectProtocol] = []
@@ -143,6 +148,9 @@ final class KVMController: ObservableObject {
     }
 
     func emergencyRelease() {
+        // A paste keeps typing on its own timer, so it has to stop with everything else: leaving
+        // the window must never keep pushing characters at the server.
+        pasteTask?.cancel()
         let shouldTransmitRelease = inputCaptured || !pressedUsages.isEmpty || modifiers != 0 || mouseButtons != 0
         inputCaptured = false
         inputGeneration &+= 1
@@ -164,19 +172,19 @@ final class KVMController: ObservableObject {
     }
 
     func keyDown(keyCode: UInt16) {
-        guard inputCaptured, let usage = HIDKeyMap.usage(for: keyCode) else { return }
+        guard inputCaptured, !isPasting, let usage = HIDKeyMap.usage(for: keyCode) else { return }
         guard pressedUsages.insert(usage).inserted else { return }
         transmitKeyboardState()
     }
 
     func keyUp(keyCode: UInt16) {
-        guard inputCaptured, let usage = HIDKeyMap.usage(for: keyCode) else { return }
+        guard inputCaptured, !isPasting, let usage = HIDKeyMap.usage(for: keyCode) else { return }
         guard pressedUsages.remove(usage) != nil else { return }
         transmitKeyboardState()
     }
 
     func modifierFlagsChanged(_ flags: NSEvent.ModifierFlags) {
-        guard inputCaptured else { return }
+        guard inputCaptured, !isPasting else { return }
         let updatedModifiers = HIDKeyMap.modifierByte(for: flags)
         guard updatedModifiers != modifiers else { return }
         modifiers = updatedModifiers
@@ -228,6 +236,112 @@ final class KVMController: ObservableObject {
         }
     }
 
+    /// Pasting needs a live CH9329, but not captured input: the bridge sends HID reports no matter
+    /// who owns the local keyboard.
+    var canPasteClipboard: Bool {
+        serialStatus == .ready || serialStatus == .warning
+    }
+
+    /// Types the clipboard on the server as US-layout keystrokes.
+    func pasteClipboard() {
+        guard canPasteClipboard else {
+            pasteSkippedCharacters = 0
+            pasteMessage = "Connect UART before pasting"
+            return
+        }
+        guard pasteTask == nil else { return }
+        guard let text = NSPasteboard.general.string(forType: .string), !text.isEmpty else {
+            pasteSkippedCharacters = 0
+            pasteMessage = "The clipboard holds no text"
+            return
+        }
+
+        let plan = HIDTextMap.plan(for: text)
+        pasteSkippedCharacters = plan.skippedCharacters
+        guard !plan.keystrokes.isEmpty else {
+            pasteMessage = "Nothing to type: none of these \(plan.skippedCharacters) characters exist on a US keyboard"
+            return
+        }
+
+        // The paste composes its own keyboard reports, so anything the user is physically holding —
+        // the shortcut's own ⇧⌘ included — is dropped first, and local key events stay muted until
+        // the paste ends. A stray event in the middle of the text would corrupt it silently.
+        pressedUsages.removeAll()
+        modifiers = 0
+        isPasting = true
+        pasteProgress = 0
+        pasteMessage = "Typing 0 of \(plan.keystrokes.count) characters…"
+
+        let interval = selectedSerialBaud.keystrokeIntervalNanoseconds
+        pasteTask = Task { [keystrokes = plan.keystrokes] in
+            var heldModifiers: UInt8 = 0
+            var typed = 0
+            var failure: Error?
+
+            do {
+                for keystroke in keystrokes {
+                    if keystroke.modifiers != heldModifiers {
+                        // Shift gets its own frame, the way a physical keyboard reports it before
+                        // the key travels down; held across a run of capitals it also saves frames.
+                        heldModifiers = keystroke.modifiers
+                        try await serial.sendKeyboard(modifiers: heldModifiers, usages: [])
+                        try await Task.sleep(nanoseconds: interval)
+                    }
+
+                    try await serial.sendKeyboard(modifiers: heldModifiers, usages: [keystroke.usage])
+                    try await Task.sleep(nanoseconds: interval)
+                    // The key-up stops the target's auto-repeat and is what makes a doubled
+                    // character ("ll", "--") arrive as two presses instead of one.
+                    try await serial.sendKeyboard(modifiers: heldModifiers, usages: [])
+                    try await Task.sleep(nanoseconds: interval)
+
+                    typed += 1
+                    pasteProgress = Double(typed) / Double(keystrokes.count)
+                    pasteMessage = "Typing \(typed) of \(keystrokes.count) characters…"
+                }
+            } catch {
+                // Task.sleep is the cancellation point; a UART failure arrives the same way.
+                failure = error
+            }
+
+            // Finished, cancelled, or broken, the server must never be left holding a key.
+            try? await serial.sendKeyboard(modifiers: 0, usages: [])
+
+            pasteTask = nil
+            isPasting = false
+            pasteProgress = 0
+            pasteMessage = Self.pasteSummary(
+                typed: typed,
+                total: keystrokes.count,
+                skipped: plan.skippedCharacters,
+                failure: failure
+            )
+            if let failure, !(failure is CancellationError) {
+                recordTransportFailure(failure)
+            }
+        }
+    }
+
+    func cancelPaste() {
+        pasteTask?.cancel()
+    }
+
+    /// The skipped count is always part of the summary. Dropping a character of a password or of a
+    /// shell command without saying so is worse than refusing the paste outright.
+    private static func pasteSummary(typed: Int, total: Int, skipped: Int, failure: Error?) -> String {
+        let skippedNote = skipped > 0
+            ? " · skipped \(skipped): CH9329 types US-layout ASCII only"
+            : ""
+
+        if failure is CancellationError {
+            return "Paste cancelled after \(typed) of \(total) characters" + skippedNote
+        }
+        if failure != nil {
+            return "Paste stopped after \(typed) of \(total) characters: the UART write failed" + skippedNote
+        }
+        return "Typed \(typed) characters from the clipboard" + skippedNote
+    }
+
     private func transmitKeyboardState() {
         let usages = pressedUsages.sorted()
         let currentModifiers = modifiers
@@ -262,7 +376,9 @@ final class KVMController: ObservableObject {
     }
 
     private func flushMouseIfPossible() {
-        guard inputCaptured, !mouseWriteInFlight else { return }
+        // Mouse frames share the same 9,600-baud link, so they wait until the paste has finished
+        // rather than pushing keystroke frames further apart. Movement keeps accumulating.
+        guard inputCaptured, !isPasting, !mouseWriteInFlight else { return }
 
         let deltaX = takeMouseStep(from: &pendingMouseX)
         let deltaY = takeMouseStep(from: &pendingMouseY)
