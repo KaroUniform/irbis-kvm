@@ -20,6 +20,7 @@
 		A1000000000000000000000B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000022 /* AVFoundation.framework */; };
 		A1000000000000000000000C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000023 /* SwiftUI.framework */; };
 		A1000000000000000000000D /* LocalPointerCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001B /* LocalPointerCapture.swift */; };
+		A1000000000000000000000E /* HIDTextMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001C /* HIDTextMap.swift */; };
 		A1000000000000000000000F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001D /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,7 @@
 		A10000000000000000000019 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A1000000000000000000001A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000000000000000000001B /* LocalPointerCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalPointerCapture.swift; sourceTree = "<group>"; };
+		A1000000000000000000001C /* HIDTextMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDTextMap.swift; sourceTree = "<group>"; };
 		A1000000000000000000001D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10000000000000000000021 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A10000000000000000000022 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -111,7 +113,10 @@
 		};
 		A10000000000000000000046 /* Protocol */ = {
 			isa = PBXGroup;
-			children = (A10000000000000000000013 /* CH9329Protocol.swift */,);
+			children = (
+				A10000000000000000000013 /* CH9329Protocol.swift */,
+				A1000000000000000000001C /* HIDTextMap.swift */,
+			);
 			path = Protocol;
 			sourceTree = "<group>";
 		};
@@ -201,6 +206,7 @@
 				A10000000000000000000001 /* IrbisKVMApp.swift in Sources */,
 				A10000000000000000000002 /* KVMController.swift in Sources */,
 				A10000000000000000000003 /* CH9329Protocol.swift in Sources */,
+				A1000000000000000000000E /* HIDTextMap.swift in Sources */,
 				A10000000000000000000004 /* CH9329SerialTransport.swift in Sources */,
 				A10000000000000000000005 /* VideoCaptureController.swift in Sources */,
 				A1000000000000000000000D /* LocalPointerCapture.swift in Sources */,

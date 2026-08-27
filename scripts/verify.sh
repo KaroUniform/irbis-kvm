@@ -15,6 +15,7 @@ xcodebuild \
 xcrun swiftc \
   -parse-as-library \
   "$project_root/IrbisKVM/Protocol/CH9329Protocol.swift" \
+  "$project_root/IrbisKVM/Protocol/HIDTextMap.swift" \
   "$project_root/tools/CH9329ProtocolSelfTest.swift" \
   -o "$build_root/CH9329ProtocolSelfTest"
 

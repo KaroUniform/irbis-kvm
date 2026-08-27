@@ -245,6 +245,16 @@ enum SerialBaud: Int, CaseIterable, Identifiable {
 
     var id: Int { rawValue }
 
+    /// Minimum gap between two keyboard frames. A frame is `keyboardFrameByteCount` bytes and 8N1
+    /// puts 10 bits on the wire per byte, so at 9,600 baud one frame already owns the UART for
+    /// ~15 ms; writing faster only piles frames into the kernel queue and can overrun the CH9329
+    /// receive buffer. The margin covers the bridge forwarding the report over USB, and the floor
+    /// keeps 115,200 baud from typing faster than a BIOS keyboard stack can follow.
+    var keystrokeIntervalNanoseconds: UInt64 {
+        let wireSeconds = Double(CH9329Protocol.keyboardFrameByteCount * 10) / Double(rawValue)
+        return UInt64(max(0.005, wireSeconds * 1.25) * 1_000_000_000)
+    }
+
     fileprivate var speed: speed_t {
         switch self {
         case .baud9600: return speed_t(B9600)
